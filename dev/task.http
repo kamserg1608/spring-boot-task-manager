@@ -1,0 +1,33 @@
+POST http://localhost:8083/tasks HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "Sample Task",
+  "description": "This is a sample task"
+}
+
+###
+
+GET http://localhost:8083/tasks HTTP/1.1
+
+###
+
+
+GET http://localhost:8083/tasks/1 HTTP/1.1
+
+###
+
+
+PUT http://localhost:8083/tasks/1 HTTP/1.1
+Content-Type: application/json
+
+{
+"title": "Updated Task",
+"description": "Updated description",
+"userId": 1
+}
+
+###
+
+
+DELETE http://localhost:8083/tasks/1 HTTP/1.1
