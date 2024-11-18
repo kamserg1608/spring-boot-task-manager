@@ -40,19 +40,21 @@ public class LoggingAspect {
     }
 
     @Around("org.example.taskmanager.aspect.CommonPointcutConfig.getTimeLimitedMethods()")
-    public Object logExecutionTime(ProceedingJoinPoint pjp) throws Throwable {
+    public Object logExecutionTime(ProceedingJoinPoint pjp) {
         long startTime = System.currentTimeMillis();
+        Object result = null;
         logger.info("Advice_Around -- Start execution method: {}", pjp.getSignature().toShortString());
         try {
-            Object result = pjp.proceed();
-            long endTime = System.currentTimeMillis();
-            long executionTime = endTime - startTime;
-            logger.info("Advice_Around -- Stop execution method: {}", pjp.getSignature() + " executed in " + executionTime + " ms");
-            return result;
+            result = pjp.proceed();
         } catch (Throwable e) {
             logger.error("Advice_Around method: {}", pjp.getSignature().toShortString());
-            throw e;
         }
+
+        long endTime = System.currentTimeMillis();
+        long executionTime = endTime - startTime;
+        logger.info("Advice_Around -- Stop execution method: {}", pjp.getSignature() + " executed in " + executionTime + " ms");
+
+        return result;
     }
 
 }
