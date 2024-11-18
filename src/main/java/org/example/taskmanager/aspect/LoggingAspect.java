@@ -2,16 +2,16 @@ package org.example.taskmanager.aspect;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.example.taskmanager.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 
@@ -21,20 +21,9 @@ public class LoggingAspect {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private DataSource dataSource;
-
     @Before("org.example.taskmanager.aspect.CommonPointcutConfig.getAllTaskServiceMethods()")
     public void beforeAdvice(JoinPoint joinPoint) {
-        try (Connection connection = dataSource.getConnection()) {
-            if (connection == null || !connection.isValid(10)) {
-                throw new RuntimeException("Database connection is not valid");
-            }
-            logger.info("Advice_Before method: {}", joinPoint.getSignature().toShortString());
-            logger.info("Database connection is valid");
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to check database connection", e);
-        }
+        logger.info("Advice_Before method: {}", joinPoint.getSignature().toShortString());
     }
 
     @AfterReturning(pointcut = "org.example.taskmanager.aspect.CommonPointcutConfig.getEntityCount()", returning = "result")
@@ -42,9 +31,6 @@ public class LoggingAspect {
         logger.info("Advice_AfterReturning -- Count: {} Method {}", result.size(), joinPoint.getSignature().toShortString());
     }
 
-    // TC
-    // updateTask - RuntimeException
-    // getTaskById - ResourceNotFoundException - correct behavior
     @AfterThrowing(
             pointcut = "org.example.taskmanager.aspect.CommonPointcutConfig.getAllTaskServiceMethods()",
             throwing = "exception")

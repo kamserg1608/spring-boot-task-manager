@@ -3,6 +3,7 @@ Content-Type: application/json
 
 {
   "title": "Sample Task",
+  "userId": "12345",
   "description": "This is a sample task"
 }
 

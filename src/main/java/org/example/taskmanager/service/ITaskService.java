@@ -1,19 +1,19 @@
 package org.example.taskmanager.service;
 
-import org.example.taskmanager.entity.Task;
+import org.example.taskmanager.model.TaskDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ITaskService {
 
-    Task createTask(Task task);
+    TaskDTO createTask(TaskDTO task);
 
-    Optional<Task> getTaskById(Long id);
+    Optional<TaskDTO> getTaskById(Long id);
 
-    Task updateTask(Long id, Task updatedTask);
+    Optional<TaskDTO> updateTaskById(Long id, TaskDTO updatedTask);
 
     void deleteTask(Long id);
 
-    List<Task> getAllTasks();
+    List<TaskDTO> getAllTasks();
 }
