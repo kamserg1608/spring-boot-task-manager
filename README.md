@@ -34,4 +34,9 @@ The application uses AOP to log various events during task operations. The follo
 | AfterReturning | Logs when a method returns successfully.                     |
 | Around         | Logs both before and after a method, providing more control. |
 
+### Development URLs
+
+* **H2 Database Console:** [http://localhost:8083/h2-console](http://localhost:8083/h2-console)
+* **Actuator Mappings:** [http://localhost:8083/actuator/mappings](http://localhost:8083/actuator/mappings)
+
 ## HomeWork 2
