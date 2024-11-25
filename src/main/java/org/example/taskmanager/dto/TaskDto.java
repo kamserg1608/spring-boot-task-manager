@@ -1,11 +1,11 @@
-package org.example.taskmanager.model;
+package org.example.taskmanager.dto;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Builder
 @Data
-public class TaskDTO {
+public class TaskDto {
     private Long id;
     private String title;
     private String description;

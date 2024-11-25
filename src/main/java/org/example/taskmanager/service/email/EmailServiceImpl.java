@@ -2,10 +2,10 @@ package org.example.taskmanager.service.email;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.taskmanager.dto.MessageDto;
 import org.example.taskmanager.mappers.EmailMapper;
 import org.example.taskmanager.model.EmailDetails;
-import org.example.taskmanager.model.MessageDto;
-import org.springframework.beans.factory.annotation.Value;
+import org.example.taskmanager.model.EmailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -18,11 +18,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
-    private final JavaMailSender emailSender;
+    private final JavaMailSender javaEmailSender;
     private final EmailMapper emailMapper;
-
-    @Value("${spring.mail.username}")
-    private String sender;
+    private final EmailSender emailSender;
 
     public void createNotification(List<MessageDto> messages) {
         log.debug("received messages {}", messages.size());
@@ -35,12 +33,12 @@ public class EmailServiceImpl implements EmailService {
             SimpleMailMessage mailMessage
                     = new SimpleMailMessage();
 
-            mailMessage.setFrom(sender);
-            mailMessage.setTo(sender);
+            mailMessage.setFrom(emailSender.username());
+            mailMessage.setTo(emailSender.username());
             mailMessage.setText(details.getMsgBody());
             mailMessage.setSubject("Subject");
 
-            emailSender.send(mailMessage);
+            javaEmailSender.send(mailMessage);
             log.info("Mail Sent Successfully...");
         } catch (Exception ex) {
             log.error("Error while Sending Mail", ex);

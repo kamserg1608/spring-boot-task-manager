@@ -1,15 +1,17 @@
-package org.example.taskmanager.model;
+package org.example.taskmanager.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MessageDto {
-    private Long id;
-    private String status;
+public class ResponseDto {
+    private String statusCode;
+    private String statusMsg;
+
 }

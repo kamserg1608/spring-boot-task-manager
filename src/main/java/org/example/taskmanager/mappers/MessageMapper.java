@@ -1,6 +1,6 @@
 package org.example.taskmanager.mappers;
 
-import org.example.taskmanager.model.MessageDto;
+import org.example.taskmanager.dto.MessageDto;
 import org.example.taskmanager.model.TaskStatus;
 import org.springframework.stereotype.Component;
 

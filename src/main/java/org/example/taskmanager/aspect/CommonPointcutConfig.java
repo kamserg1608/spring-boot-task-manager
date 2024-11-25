@@ -4,7 +4,7 @@ import org.aspectj.lang.annotation.Pointcut;
 
 public class CommonPointcutConfig {
 
-    @Pointcut("execution(* org.example.taskmanager.service.TaskServiceImpl.createTask(..))")
+    @Pointcut("execution(* org.example.taskmanager.service.task.TaskServiceImpl.createTask(..))")
     public void getTimeLimitedMethods() {
     }
 
@@ -12,7 +12,7 @@ public class CommonPointcutConfig {
     public void getEntityCount() {
     }
 
-    @Pointcut("execution(* org.example.taskmanager.service.TaskServiceImpl.*(..))")
+    @Pointcut("execution(* org.example.taskmanager.service.task.TaskServiceImpl.*(..))")
     public void getAllTaskServiceMethods() {
     }
 

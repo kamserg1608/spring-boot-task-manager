@@ -3,7 +3,7 @@ package org.example.taskmanager.kafka;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.taskmanager.model.MessageDto;
+import org.example.taskmanager.dto.MessageDto;
 import org.example.taskmanager.service.email.EmailService;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;

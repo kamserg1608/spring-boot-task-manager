@@ -17,12 +17,14 @@ public class KafkaClientProducer {
     @Value("${kafka.topic.task_notification_registration}")
     private String topic;
 
-    public void send(Object o) {
-        try {
-            kafkaProducer.send(topic, o).get();
-            kafkaProducer.flush();
-        } catch (Exception ex) {
-            log.error(ex.getMessage(), ex);
-        }
+    public void send(Object message) {
+        kafkaProducer.send(topic, message)
+                .whenComplete((result, ex) -> {
+                    if (ex == null) {
+                        log.info("Published event to topic {}: value = {}", topic, message.toString());
+                    } else {
+                        throw new RuntimeException("Caught an exception", ex);
+                    }
+                });
     }
 }

@@ -1,7 +1,7 @@
 package org.example.taskmanager.service.email;
 
 import org.example.taskmanager.model.EmailDetails;
-import org.example.taskmanager.model.MessageDto;
+import org.example.taskmanager.dto.MessageDto;
 
 import java.util.List;
 

@@ -1,7 +1,8 @@
 package org.example.taskmanager.config;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.example.taskmanager.model.EmailSender;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -11,11 +12,9 @@ import java.util.Properties;
 
 @Slf4j
 @Configuration
+@RequiredArgsConstructor
 public class MailConfig {
-    @Value("${spring.mail.username}")
-    private String username;
-    @Value("${spring.mail.password}")
-    private String password;
+    private final EmailSender emailSender;
 
     @Bean
     public JavaMailSender getJavaMailSender() {
@@ -23,8 +22,8 @@ public class MailConfig {
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
 
-        mailSender.setUsername(username);
-        mailSender.setPassword(password);
+        mailSender.setUsername(emailSender.username());
+        mailSender.setPassword(emailSender.password());
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

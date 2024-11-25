@@ -1,7 +1,7 @@
 package org.example.taskmanager.mappers;
 
 import org.example.taskmanager.model.EmailDetails;
-import org.example.taskmanager.model.MessageDto;
+import org.example.taskmanager.dto.MessageDto;
 import org.springframework.stereotype.Component;
 
 @Component
