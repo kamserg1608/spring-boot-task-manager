@@ -28,13 +28,13 @@ spring:
       enabled: true
       path: /h2-console
 
+
+
 logging:
   level:
-    org:
-      springframework: INFO
-    com:
-      example:
-        taskmanager: DEBUG
+    org.springframework: INFO
+    org.example.taskmanager: DEBUG
+
 
 management:
   info:
@@ -44,3 +44,16 @@ management:
     web:
       exposure:
         include: "*"
+
+kafka:
+  bootstrap-servers: localhost:9092
+  consumer:
+    group-id: task_notification
+  producer:
+    enable: true
+  topic:
+    task_notification_registration: task_notification_registration
+
+email:
+  username: kamserg1608@gmail.com
+  password: password
