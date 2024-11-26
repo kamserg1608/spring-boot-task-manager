@@ -2,10 +2,10 @@ package org.example.taskmanager.service.email;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.taskmanager.config.EmailProperties;
 import org.example.taskmanager.dto.MessageDto;
 import org.example.taskmanager.mappers.EmailMapper;
 import org.example.taskmanager.model.EmailDetails;
-import org.example.taskmanager.model.EmailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender javaEmailSender;
     private final EmailMapper emailMapper;
-    private final EmailSender emailSender;
+    private final EmailProperties emailSender;
 
     public void createNotification(List<MessageDto> messages) {
         log.debug("received messages {}", messages.size());
@@ -33,8 +33,8 @@ public class EmailServiceImpl implements EmailService {
             SimpleMailMessage mailMessage
                     = new SimpleMailMessage();
 
-            mailMessage.setFrom(emailSender.username());
-            mailMessage.setTo(emailSender.username());
+            mailMessage.setFrom(emailSender.getEmail());
+            mailMessage.setTo(emailSender.getEmail());
             mailMessage.setText(details.getMsgBody());
             mailMessage.setSubject("Subject");
 
