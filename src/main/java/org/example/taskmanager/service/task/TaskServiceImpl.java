@@ -1,10 +1,12 @@
-package org.example.taskmanager.service;
+package org.example.taskmanager.service.task;
 
 import lombok.RequiredArgsConstructor;
 import org.example.taskmanager.annotations.HowManyRecords;
+import org.example.taskmanager.dto.TaskDto;
+import org.example.taskmanager.entity.Task;
 import org.example.taskmanager.exception.ResourceNotFoundException;
+import org.example.taskmanager.exception.TaskAlreadyExistsException;
 import org.example.taskmanager.mappers.TaskMapper;
-import org.example.taskmanager.model.TaskDTO;
 import org.example.taskmanager.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,45 +19,46 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class TaskServiceImpl implements ITaskService {
+public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
 
-    public TaskDTO createTask(TaskDTO task) {
+    public TaskDto createTask(TaskDto task) {
+        taskRepository.findById(task.getId())
+                .orElseThrow(() -> new TaskAlreadyExistsException("Task already exists with id " + task.getId()));
         return taskMapper.taskToTaskDto(taskRepository.save(taskMapper.taskDtoToTask(task)));
     }
 
-    public Optional<TaskDTO> getTaskById(Long id) {
-        checkTaskIdExist(id);
-        return Optional.ofNullable(taskMapper.taskToTaskDto(taskRepository.findById(id)
-                .orElse(null)));
+    public TaskDto getTaskById(Long id) {
+        return taskMapper.taskToTaskDto(taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id)));
     }
 
-    public Optional<TaskDTO> updateTaskById(Long id, TaskDTO updatedTaskDTO) {
-        AtomicReference<Optional<TaskDTO>> atomicReference = new AtomicReference<>();
+    public Optional<TaskDto> updateTaskById(Long id, TaskDto updatedTaskDto) {
+        checkTaskIdExist(id);
+        AtomicReference<Optional<TaskDto>> atomicReference = new AtomicReference<>();
 
-        taskRepository.findById(id).ifPresentOrElse(foundTask -> {
-            foundTask.setDescription(updatedTaskDTO.getDescription());
-            foundTask.setTitle(updatedTaskDTO.getTitle());
-            foundTask.setUserId(updatedTaskDTO.getUserId());
-            foundTask.setDescription(updatedTaskDTO.getDescription());
+        taskRepository.findById(id).ifPresent(foundTask -> {
+            foundTask.setDescription(updatedTaskDto.getDescription());
+            foundTask.setTitle(updatedTaskDto.getTitle());
+            foundTask.setUserId(updatedTaskDto.getUserId());
+            foundTask.setDescription(updatedTaskDto.getDescription());
             atomicReference.set(Optional.of(taskMapper
                     .taskToTaskDto(taskRepository.save(foundTask))));
-        }, () -> {
-            atomicReference.set(Optional.empty());
         });
 
         return atomicReference.get();
     }
 
-    public void deleteTask(Long id) {
+    public boolean deleteTask(Long id) {
         checkTaskIdExist(id);
         taskRepository.deleteById(id);
+        return true;
     }
 
     @HowManyRecords
-    public List<TaskDTO> getAllTasks() {
+    public List<TaskDto> getAllTasks() {
         return taskRepository.findAll()
                 .stream()
                 .map(taskMapper::taskToTaskDto)
