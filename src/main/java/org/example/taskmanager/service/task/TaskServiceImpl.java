@@ -25,8 +25,9 @@ public class TaskServiceImpl implements TaskService {
     private final TaskMapper taskMapper;
 
     public TaskDto createTask(TaskDto task) {
-        taskRepository.findById(task.getId())
-                .orElseThrow(() -> new TaskAlreadyExistsException("Task already exists with id " + task.getId()));
+        if (taskRepository.findById(task.getId()).isPresent()) {
+            throw new TaskAlreadyExistsException("Task already exists with id " + task.getId());
+        }
         return taskMapper.taskToTaskDto(taskRepository.save(taskMapper.taskDtoToTask(task)));
     }
 

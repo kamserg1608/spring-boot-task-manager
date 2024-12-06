@@ -35,6 +35,13 @@ logging:
     org.springframework: INFO
     org.example.taskmanager: DEBUG
 
+t1:
+  http:
+    request:
+      logger:
+        enabled: true
+        log-level: INFO
+
 
 management:
   info:
