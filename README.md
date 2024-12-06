@@ -39,4 +39,14 @@ The application uses AOP to log various events during task operations. The follo
 * **H2 Database Console:** [http://localhost:8083/h2-console](http://localhost:8083/h2-console)
 * **Actuator Mappings:** [http://localhost:8083/actuator/mappings](http://localhost:8083/actuator/mappings)
 
-## HomeWork 2
+## HomeWork 3
+Add the starter to your Spring Boot project:
+* **logger-starter:** [logger-starter](https://github.com/kamserg1608/logger-starter)
+```
+<dependency>
+    <groupId>org.example.t1.http.logger</groupId>
+    <artifactId>logger-starter</artifactId>
+    <version>${org.example.t1.http.logger}</version>
+</dependency>
+```
+
