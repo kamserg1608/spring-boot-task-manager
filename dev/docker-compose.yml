@@ -1,6 +1,17 @@
 version: "1.0"
 
 services:
+  postgres:
+    image: postgres:11.3
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "0000"
+      POSTGRES_DB: testdb
+    volumes:
+      - ./postgres:/docker-entrypoint-initdb.d:ro
   zookeeper:
     image: confluentinc/cp-zookeeper:5.5.0
     hostname: zookeeper

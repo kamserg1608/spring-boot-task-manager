@@ -4,7 +4,7 @@ Content-Type: application/json
 {
   "id": 1,
   "title": "Sample Task",
-  "userId": "12345",
+  "userId": 1,
   "description": "This is a sample task"
 }
 
@@ -33,3 +33,52 @@ Content-Type: application/json
 
 
 DELETE http://localhost:8083/tasks/1 HTTP/1.1
+
+
+###
+#security
+###
+POST http://localhost:8083/api/auth/signup
+Content-Type: application/json
+
+{
+  "username": "serg_user",
+  "email": "kamserg1608@gmail.com",
+  "role": ["user"],
+  "password": "0000"
+}
+
+###
+POST http://localhost:8083/api/auth/signup
+Content-Type: application/json
+
+{
+  "username": "root",
+  "email": "root@yandex.ru",
+  "role": ["admin"],
+  "password": "1111"
+}
+###
+POST http://localhost:8083/api/auth/signin
+Content-Type: application/json
+
+{
+  "username": "serg_user",
+  "password": "0000"
+}
+###
+POST http://localhost:8083/api/auth/signin
+Content-Type: application/json
+
+{
+  "username": "root",
+  "password": "1111"
+}
+
+###
+GET http://localhost:8083/admin
+Authorization: Bearer {{$auth.token("serg_user", "0000")}}
+
+###
+GET http://localhost:8083/user
+Authorization: Bearer {{$auth.token("root", "1111")}}

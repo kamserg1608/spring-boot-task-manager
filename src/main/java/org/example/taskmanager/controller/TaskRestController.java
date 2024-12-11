@@ -15,40 +15,42 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/tasks")
 public class TaskRestController {
+
+    public static final String TASKS = "/tasks";
+    public static final String TASKS_PATH_ID = TASKS + "/{id}";
+
 
     private final DispatchService dispatchService;
     private final TaskServiceImpl taskServiceImpl;
 
 
-    @PostMapping
+    @PostMapping(TASKS)
     public TaskDto createTask(@RequestBody TaskDto task) {
         TaskDto created = taskServiceImpl.createTask(task);
-        dispatchService.send(task.getId(), TaskStatus.CREATED);
+        dispatchService.send(task.id(), TaskStatus.CREATED);
         return created;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(TASKS_PATH_ID)
     public TaskDto getTaskById(@PathVariable Long id) {
         return taskServiceImpl.getTaskById(id);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(TASKS_PATH_ID)
     public ResponseEntity<TaskDto> updateTask(@PathVariable Long id, @RequestBody TaskDto task) {
         return taskServiceImpl.updateTaskById(id, task)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(TASKS_PATH_ID)
     public ResponseEntity<ResponseDto> deleteTask(@PathVariable Long id) {
         boolean isDeleted = taskServiceImpl.deleteTask(id);
         if (isDeleted) {
@@ -63,7 +65,7 @@ public class TaskRestController {
         }
     }
 
-    @GetMapping
+    @GetMapping(TASKS)
     public List<TaskDto> getAllTasks() {
         return taskServiceImpl.getAllTasks();
     }

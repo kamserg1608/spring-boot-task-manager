@@ -15,5 +15,7 @@ public interface TaskService {
 
     boolean  deleteTask(Long id);
 
+    void deleteAllTask();
+
     List<TaskDto> getAllTasks();
 }
