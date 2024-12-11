@@ -3,7 +3,6 @@ package org.example.taskmanager.service.task;
 import lombok.RequiredArgsConstructor;
 import org.example.taskmanager.annotations.HowManyRecords;
 import org.example.taskmanager.dto.TaskDto;
-import org.example.taskmanager.entity.Task;
 import org.example.taskmanager.exception.ResourceNotFoundException;
 import org.example.taskmanager.exception.TaskAlreadyExistsException;
 import org.example.taskmanager.mappers.TaskMapper;
@@ -25,8 +24,8 @@ public class TaskServiceImpl implements TaskService {
     private final TaskMapper taskMapper;
 
     public TaskDto createTask(TaskDto task) {
-        if (taskRepository.findById(task.getId()).isPresent()) {
-            throw new TaskAlreadyExistsException("Task already exists with id " + task.getId());
+        if (taskRepository.findById(task.id()).isPresent()) {
+            throw new TaskAlreadyExistsException("Task already exists with id " + task.id());
         }
         return taskMapper.taskToTaskDto(taskRepository.save(taskMapper.taskDtoToTask(task)));
     }
@@ -41,10 +40,10 @@ public class TaskServiceImpl implements TaskService {
         AtomicReference<Optional<TaskDto>> atomicReference = new AtomicReference<>();
 
         taskRepository.findById(id).ifPresent(foundTask -> {
-            foundTask.setDescription(updatedTaskDto.getDescription());
-            foundTask.setTitle(updatedTaskDto.getTitle());
-            foundTask.setUserId(updatedTaskDto.getUserId());
-            foundTask.setDescription(updatedTaskDto.getDescription());
+            foundTask.setDescription(updatedTaskDto.description());
+            foundTask.setTitle(updatedTaskDto.title());
+            foundTask.setUserId(updatedTaskDto.userId());
+            foundTask.setDescription(updatedTaskDto.description());
             atomicReference.set(Optional.of(taskMapper
                     .taskToTaskDto(taskRepository.save(foundTask))));
         });
@@ -56,6 +55,10 @@ public class TaskServiceImpl implements TaskService {
         checkTaskIdExist(id);
         taskRepository.deleteById(id);
         return true;
+    }
+
+    public void deleteAllTask() {
+        taskRepository.deleteAll();
     }
 
     @HowManyRecords
